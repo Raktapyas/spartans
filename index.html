@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SPARTANS — No Excuses</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Mono:wght@400;700&family=Metal+Mania&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+
+  <!-- ══════════════ NAVIGATION ══════════════ -->
+  <nav class="site-nav" role="navigation" aria-label="Main navigation">
+    <span class="nav-logo flicker">SPARTANS</span>
+    <div class="nav-right">
+      <span id="live-clock" aria-label="Current time">00:00:00</span>
+      <span class="nav-tag">NO EXCUSES</span>
+    </div>
+  </nav>
+
+  <!-- ══════════════ MAIN WRAPPER ══════════════ -->
+  <main class="wrapper" role="main">
+
+    <!-- ── HERO / DAILY QUOTE ───────────────── -->
+    <section class="hero" aria-label="Daily quote">
+      <p class="hero-eyebrow">⚔ DAILY MOTIVATION ⚔</p>
+
+      <div id="quote-display" role="heading" aria-level="1">
+        <!-- Populated by app.js -->
+      </div>
+
+      <span id="quote-author" class="quote-dash"></span>
+
+      <div style="margin-top:20px;">
+        <button
+          id="quote-refresh"
+          class="btn"
+          aria-label="Get new quote"
+          style="font-size:0.65rem;padding:7px 18px;letter-spacing:3px;">
+          NEW QUOTE
+        </button>
+      </div>
+
+      <div class="hero-divider"></div>
+    </section>
+
+    <!-- ── STATS BAR ─────────────────────────── -->
+    <div class="stats-bar" role="region" aria-label="Today's stats">
+      <div class="stat-cell">
+        <span id="stat-km" class="stat-cell-val">0.0</span>
+        <span class="stat-cell-label">KM TODAY</span>
+      </div>
+      <div class="stat-cell">
+        <span id="stat-mins" class="stat-cell-val">0</span>
+        <span class="stat-cell-label">MINUTES</span>
+      </div>
+      <div class="stat-cell">
+        <span id="stat-ex" class="stat-cell-val">0</span>
+        <span class="stat-cell-label">EXERCISES</span>
+      </div>
+      <div class="stat-cell">
+        <span id="stat-cal" class="stat-cell-val">0</span>
+        <span class="stat-cell-label">~CALORIES</span>
+      </div>
+    </div>
+
+    <!-- ── TRACKER GRID ───────────────────────── -->
+    <div class="tracker-grid" role="region" aria-label="Activity trackers">
+
+      <!-- CARD 1: Daily Run / Walk -->
+      <div class="card" id="run-card" aria-label="Daily run/walk tracker">
+        <div class="card-header">
+          <h2 class="card-title">DAILY RUN / WALK</h2>
+          <span class="card-icon" aria-hidden="true">🏃</span>
+        </div>
+
+        <div class="section-title"><span>DISTANCE</span> GOAL: 10 KM</div>
+
+        <div class="metric-row">
+          <span class="metric-label">TOTAL KM</span>
+          <span class="metric-val" id="run-total-km">0.0</span>
+        </div>
+        <div class="prog-bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0">
+          <div class="prog-bar-fill" id="run-prog-fill" style="width:0%"></div>
+        </div>
+
+        <div class="metric-row">
+          <span class="metric-label">TOTAL MINS</span>
+          <span class="metric-val" id="run-total-mins">0</span>
+        </div>
+
+        <ul class="exercise-list" id="run-list" aria-label="Run log entries"></ul>
+
+        <!-- Inputs -->
+        <div class="section-title" style="margin-top:16px;"><span>LOG</span> NEW ACTIVITY</div>
+        <div style="margin-bottom:8px;">
+          <select id="run-type" class="spartan-input" style="width:100%;cursor:pointer;" aria-label="Activity type">
+            <option value="run">RUN</option>
+            <option value="walk">WALK</option>
+            <option value="jog">JOG</option>
+            <option value="sprint">SPRINT</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <input id="run-km"   type="number" class="spartan-input" placeholder="KM"   min="0.1" step="0.1" aria-label="Distance in km" />
+          <input id="run-mins" type="number" class="spartan-input" placeholder="MINS" min="1"   step="1"   aria-label="Duration in minutes" />
+          <button id="run-add-btn" class="btn btn-green" aria-label="Log activity">LOG</button>
+        </div>
+      </div>
+
+      <!-- CARD 2: Basic Exercise -->
+      <div class="card" id="ex-card" aria-label="Exercise tracker">
+        <div class="card-header">
+          <h2 class="card-title">BASIC EXERCISE</h2>
+          <span class="card-icon" aria-hidden="true">💪</span>
+        </div>
+
+        <div class="section-title"><span>EXERCISES</span> GOAL: 5 TYPES</div>
+
+        <div class="metric-row">
+          <span class="metric-label">LOGGED TODAY</span>
+          <span class="metric-val" id="ex-total">0</span>
+        </div>
+        <div class="prog-bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+          <div class="prog-bar-fill" id="ex-prog-fill" style="width:0%"></div>
+        </div>
+
+        <!-- Quick-add preset buttons -->
+        <div class="section-title" style="margin-top:16px;"><span>QUICK</span> ADD</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;" aria-label="Quick-add exercises">
+          <button class="btn" style="font-size:0.6rem;padding:5px 10px;" data-quick="PUSH-UPS|3|20">PUSH-UPS</button>
+          <button class="btn" style="font-size:0.6rem;padding:5px 10px;" data-quick="PULL-UPS|3|10">PULL-UPS</button>
+          <button class="btn" style="font-size:0.6rem;padding:5px 10px;" data-quick="SQUATS|3|25">SQUATS</button>
+          <button class="btn" style="font-size:0.6rem;padding:5px 10px;" data-quick="PLANK|3|60">PLANK</button>
+          <button class="btn" style="font-size:0.6rem;padding:5px 10px;" data-quick="BURPEES|3|15">BURPEES</button>
+          <button class="btn" style="font-size:0.6rem;padding:5px 10px;" data-quick="DIPS|3|15">DIPS</button>
+        </div>
+
+        <ul class="exercise-list" id="ex-list" aria-label="Exercise log entries"></ul>
+
+        <!-- Custom inputs -->
+        <div class="section-title" style="margin-top:16px;"><span>CUSTOM</span> EXERCISE</div>
+        <div style="margin-bottom:8px;">
+          <input id="ex-name" type="text" class="spartan-input" placeholder="EXERCISE NAME" style="width:100%;" aria-label="Exercise name" />
+        </div>
+        <div class="input-group">
+          <input id="ex-sets" type="number" class="spartan-input" placeholder="SETS" min="1" aria-label="Number of sets" />
+          <input id="ex-reps" type="number" class="spartan-input" placeholder="REPS" min="1" aria-label="Number of reps" />
+          <button id="ex-add-btn" class="btn btn-green" aria-label="Log exercise">LOG</button>
+        </div>
+      </div>
+
+    </div><!-- /tracker-grid -->
+
+    <!-- ── MUSIC PLAYER ───────────────────────── -->
+    <section class="music-section" aria-label="Music player">
+      <div class="section-title"><span>UNDERGROUND</span> TEMPO</div>
+
+      <div class="music-player">
+        <div class="music-header">
+          <span class="music-title">UNDERGROUND TEMPO</span>
+          <span class="music-badge">● LIVE</span>
+        </div>
+
+        <!-- Hidden YouTube iframes — audio only -->
+        <div class="audio-iframes" aria-hidden="true">
+          <iframe
+            id="iframe-1"
+            data-src="https://www.youtube.com/embed/u6zp1ylT4AQ?si=lH3R_zmytOc2LKNP&enablejsapi=1"
+            width="0" height="0"
+            title="Underground Tempo Vol. I"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin">
+          </iframe>
+          <iframe
+            id="iframe-2"
+            data-src="https://www.youtube.com/embed/fixaI64sR3g?si=qnP-J4MOW1Q8rGR-&enablejsapi=1"
+            width="0" height="0"
+            title="Underground Tempo Vol. II"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin">
+          </iframe>
+        </div>
+
+        <!-- Track list (populated by music.js) -->
+        <div id="track-list" role="list" aria-label="Track list"></div>
+
+        <p style="font-size:0.6rem;color:var(--muted);letter-spacing:2px;margin-top:16px;text-align:center;">
+          CLICK TRACK TO PLAY · CLICK AGAIN TO STOP
+        </p>
+      </div>
+    </section>
+
+  </main><!-- /wrapper -->
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <footer class="site-footer" role="contentinfo">
+    <span>SPARTANS</span> &nbsp;·&nbsp;
+    NO EXCUSES. ONLY RESULTS.
+    &nbsp;·&nbsp; &copy; <span id="footer-year"></span>
+  </footer>
+
+  <!-- ══════════════ QUICK-ADD HANDLER (inline, before module) ══════════════ -->
+  <script>
+    /* Quick-add exercise buttons — handled before ES module loads */
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-quick]');
+      if (!btn) return;
+      const [name, sets, reps] = btn.dataset.quick.split('|');
+      document.getElementById('ex-name').value = name;
+      document.getElementById('ex-sets').value = sets;
+      document.getElementById('ex-reps').value = reps;
+      document.getElementById('ex-add-btn').click();
+    });
+
+    /* Footer year */
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+  </script>
+
+  <!-- ══════════════ APP MODULE ══════════════ -->
+  <script type="module" src="js/app.js"></script>
+
+</body>
+</html>
