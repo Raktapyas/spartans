@@ -4,230 +4,1363 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SPARTANS — No Excuses</title>
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Mono:wght@400;700&family=Metal+Mania&display=swap" rel="stylesheet" />
+  <style>
+/* ═══════════════════════════════════════════════════════════
+   SPARTANS — Design System
+═══════════════════════════════════════════════════════════ */
+:root {
+  --bg:           #090909;
+  --bg-card:      #0f0f0f;
+  --border:       #1c1c1c;
+  --neon-orange:  #ff4500;
+  --blood-red:    #cc1a1a;
+  --acid-green:   #39ff14;
+  --dim-white:    rgba(255,255,255,0.88);
+  --muted:        rgba(255,255,255,0.32);
+  --very-muted:   rgba(255,255,255,0.08);
+  --font-display: 'Metal Mania', cursive;
+  --font-mono:    'Roboto Mono', monospace;
+  --font-impact:  'Anton', sans-serif;
+  --glow-o: 0 0 10px rgba(255,69,0,0.65), 0 0 24px rgba(255,69,0,0.25);
+  --glow-g: 0 0 10px rgba(57,255,20,0.65), 0 0 24px rgba(57,255,20,0.25);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--dim-white);
+  font-family: var(--font-mono); min-height: 100vh;
+  overflow-x: hidden; cursor: default;
+}
+/* Grain */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-size: 256px; opacity: 0.7;
+}
+/* Scanlines */
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+}
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--neon-orange); }
+.wrapper { max-width: 1060px; margin: 0 auto; padding: 0 22px 100px; }
 
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/main.css" />
-  <link rel="stylesheet" href="css/animations.css" />
+/* ── NAV ─────────────────────────────────────────────── */
+.site-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 26px; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: rgba(9,9,9,0.97);
+  backdrop-filter: blur(10px); z-index: 200;
+}
+.nav-logo {
+  font-family: var(--font-display); font-size: 1.45rem;
+  letter-spacing: 5px; color: var(--neon-orange);
+}
+.nav-right { display: flex; align-items: center; gap: 18px; }
+#live-clock {
+  font-family: var(--font-mono); font-size: 1.15rem; font-weight: 700;
+  color: var(--acid-green); text-shadow: var(--glow-g); letter-spacing: 3px;
+}
+.nav-tag { font-size: 0.62rem; letter-spacing: 4px; color: var(--muted); text-transform: uppercase; }
+
+/* ── HERO ────────────────────────────────────────────── */
+.hero { text-align: center; padding: 64px 20px 44px; }
+.hero-eyebrow {
+  font-size: 0.62rem; letter-spacing: 7px; color: var(--blood-red);
+  text-transform: uppercase; margin-bottom: 24px; opacity: 0.75;
+}
+#quote-display {
+  font-family: var(--font-display); font-size: clamp(1.8rem, 4.5vw, 4rem);
+  line-height: 1.12; color: var(--dim-white); letter-spacing: 2px;
+  max-width: 820px; margin: 0 auto 16px; min-height: 110px;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+#quote-author {
+  display: block; font-size: 0.68rem; letter-spacing: 5px;
+  color: var(--neon-orange); text-transform: uppercase; margin-top: 12px;
+}
+.hero-divider {
+  width: 100px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--neon-orange), transparent);
+  margin: 30px auto 0;
+}
+
+/* ── Glitch ──────────────────────────────────────────── */
+.glitch { position: relative; display: inline-block; }
+.glitch::before, .glitch::after {
+  content: attr(data-text); position: absolute; inset: 0; font: inherit; color: inherit;
+}
+.glitch::before { color: var(--blood-red); animation: gclip1 3.8s infinite linear; opacity: 0.65; }
+.glitch::after  { color: var(--acid-green); animation: gclip2 3.8s infinite linear 0.07s; opacity: 0.45; }
+@keyframes gclip1 {
+  0%,100%{ clip-path:inset(0 0 98% 0); transform:translate(-3px,0); }
+  25%    { clip-path:inset(40% 0 40% 0); transform:translate(3px,0); }
+  50%    { clip-path:inset(70% 0 15% 0); transform:translate(-2px,0); }
+  75%    { clip-path:inset(15% 0 70% 0); transform:translate(2px,0); }
+}
+@keyframes gclip2 {
+  0%,100%{ clip-path:inset(60% 0 20% 0); transform:translate(3px,0); }
+  25%    { clip-path:inset(10% 0 80% 0); transform:translate(-3px,0); }
+  50%    { clip-path:inset(85% 0 5% 0);  transform:translate(2px,0); }
+  75%    { clip-path:inset(30% 0 55% 0); transform:translate(-2px,0); }
+}
+
+/* ── Button ──────────────────────────────────────────── */
+.btn {
+  background: var(--neon-orange); color: #000; border: none;
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase; padding: 9px 20px;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: background 0.2s, transform 0.1s;
+}
+.btn:hover { background: #ff6a30; }
+.btn:active { transform: scale(0.97); }
+.btn::after {
+  content: ''; position: absolute; top: 0; left: -80%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  transform: skewX(-18deg); transition: left 0.4s;
+}
+.btn:hover::after { left: 130%; }
+
+/* ── Stats Bar ───────────────────────────────────────── */
+.stats-bar {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+  margin: 0 0 36px;
+}
+@media (max-width: 560px) { .stats-bar { grid-template-columns: repeat(2,1fr); } }
+.stat-cell { background: var(--bg-card); padding: 18px 14px; text-align: center; }
+.stat-val {
+  font-family: var(--font-impact); font-size: 2.4rem;
+  color: var(--neon-orange); text-shadow: var(--glow-o);
+  display: block; line-height: 1;
+}
+.stat-label {
+  font-size: 0.56rem; letter-spacing: 3px; color: var(--muted);
+  text-transform: uppercase; margin-top: 5px; display: block;
+}
+
+/* ── Section header ──────────────────────────────────── */
+.sec-head {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+}
+.sec-head-line { flex: 1; height: 1px; background: var(--border); }
+.sec-head-label {
+  font-family: var(--font-impact); font-size: 0.6rem;
+  letter-spacing: 6px; color: var(--muted); text-transform: uppercase; white-space: nowrap;
+}
+.sec-head-label em { font-style: normal; color: var(--neon-orange); }
+
+/* ═══════════════════════════════════════════════════════════
+   HABIT CARDS
+═══════════════════════════════════════════════════════════ */
+.habit-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-bottom: 40px;
+}
+@media (max-width: 620px) { .habit-grid { grid-template-columns: 1fr; } }
+
+.habit-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 26px 22px 22px;
+  position: relative;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+/* Top accent bar */
+.habit-card::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg, var(--blood-red), var(--neon-orange));
+  transform: scaleX(0); transform-origin: left; transition: transform 0.45s ease;
+}
+.habit-card.done::before { transform: scaleX(1); }
+.habit-card.done {
+  border-color: rgba(255,69,0,0.28);
+  box-shadow: 0 0 22px rgba(255,69,0,0.05);
+}
+
+/* Top row */
+.habit-top {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; margin-bottom: 20px;
+}
+.habit-icon-title { display: flex; align-items: center; gap: 10px; }
+.habit-icon { font-size: 1.5rem; line-height: 1; }
+.habit-title {
+  font-family: var(--font-display); font-size: 1.1rem;
+  letter-spacing: 2px; color: var(--dim-white); line-height: 1.1;
+}
+.habit-subtitle {
+  font-size: 0.56rem; letter-spacing: 3px; color: var(--muted);
+  text-transform: uppercase; margin-top: 3px;
+}
+
+/* Streak badge */
+.streak-badge { text-align: right; flex-shrink: 0; }
+.streak-num {
+  font-family: var(--font-impact); font-size: 2.2rem;
+  color: var(--neon-orange); text-shadow: var(--glow-o);
+  line-height: 1; display: block;
+}
+.streak-label {
+  font-size: 0.54rem; letter-spacing: 3px;
+  color: var(--muted); text-transform: uppercase;
+}
+
+/* Week dots */
+.week-dots {
+  display: flex; gap: 5px; margin-bottom: 18px; align-items: flex-end;
+}
+.dot-day {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;
+}
+.dot-circle {
+  width: 100%; aspect-ratio: 1; max-width: 32px;
+  border-radius: 2px; border: 1px solid var(--very-muted);
+  background: transparent; position: relative;
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.dot-circle.filled {
+  background: var(--neon-orange); border-color: var(--neon-orange);
+  box-shadow: 0 0 7px rgba(255,69,0,0.5);
+}
+.dot-circle.filled::after {
+  content: '✓'; position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.58rem; color: #000; font-weight: 900;
+}
+.dot-circle.today { border-color: rgba(255,69,0,0.45); }
+.dot-day-label {
+  font-size: 0.48rem; letter-spacing: 1px;
+  color: var(--muted); text-transform: uppercase;
+}
+
+/* Check row */
+.habit-check-row {
+  display: flex; align-items: stretch; gap: 8px;
+}
+.check-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 0; background: var(--very-muted); border: 1px solid var(--border);
+  color: var(--muted); font-family: var(--font-mono); font-size: 0.68rem;
+  font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  cursor: pointer; transition: all 0.22s;
+}
+.check-btn:hover {
+  background: rgba(255,69,0,0.08); border-color: var(--neon-orange); color: var(--neon-orange);
+}
+.check-btn.done {
+  background: rgba(57,255,20,0.07); border-color: var(--acid-green);
+  color: var(--acid-green); text-shadow: var(--glow-g);
+}
+.check-btn .ci { font-size: 1rem; transition: transform 0.3s; }
+.check-btn.done .ci { transform: scale(1.2); }
+
+.undo-btn {
+  background: none; border: 1px solid var(--very-muted); color: var(--muted);
+  font-family: var(--font-mono); font-size: 0.7rem; padding: 12px 12px;
+  cursor: pointer; text-transform: uppercase; transition: all 0.2s; letter-spacing: 1px;
+}
+.undo-btn:hover { border-color: var(--blood-red); color: var(--blood-red); }
+
+/* Footer row */
+.habit-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--very-muted);
+}
+.habit-footer-stat {
+  font-size: 0.56rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase;
+}
+.habit-footer-stat span { color: var(--dim-white); font-weight: 700; }
+
+/* ═══════════════════════════════════════════════════════════
+   MUSIC PLAYER — Custom Audio
+═══════════════════════════════════════════════════════════ */
+.music-section { margin: 0 0 60px; }
+
+.music-shell {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.music-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 24px 18px; border-bottom: 1px solid var(--border);
+}
+.music-title {
+  font-family: var(--font-display); font-size: 1.2rem;
+  letter-spacing: 3px; color: var(--dim-white);
+}
+.music-live {
+  font-size: 0.58rem; letter-spacing: 3px; color: var(--acid-green);
+  text-shadow: var(--glow-g); border: 1px solid currentColor;
+  padding: 3px 9px; text-transform: uppercase;
+}
+
+/* ── Track list ─────────────────────────────────────── */
+.track-item {
+  display: flex; align-items: center; gap: 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+.track-item:last-child { border-bottom: none; }
+.track-item:hover { background: rgba(255,69,0,0.04); }
+.track-item.playing { background: rgba(255,69,0,0.06); }
+
+/* accent bar on active */
+.track-item.playing::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--blood-red), var(--neon-orange));
+}
+
+/* ── Track left: number + meta ──────────────────────── */
+.track-left {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 20px; flex: 1; min-width: 0;
+}
+
+.track-play-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+.track-item:hover .track-play-icon,
+.track-item.playing .track-play-icon {
+  border-color: var(--neon-orange);
+  color: var(--neon-orange);
+  box-shadow: 0 0 8px rgba(255,69,0,0.25);
+}
+
+.track-meta {
+  display: flex; flex-direction: column; gap: 3px; min-width: 0;
+}
+.track-number {
+  font-family: var(--font-impact); font-size: 0.55rem;
+  letter-spacing: 4px; color: var(--muted); text-transform: uppercase;
+}
+.track-name {
+  font-family: var(--font-display); font-size: 0.95rem;
+  letter-spacing: 2px; color: var(--dim-white);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.track-tag {
+  font-size: 0.54rem; letter-spacing: 3px;
+  color: var(--muted); text-transform: uppercase;
+}
+.track-item.playing .track-name { color: var(--neon-orange); }
+
+/* EQ bars */
+.eq-bars {
+  display: none; align-items: flex-end; gap: 2px; height: 14px; margin-left: 8px; flex-shrink: 0;
+}
+.track-item.playing .eq-bars { display: flex; }
+.eq-bars span {
+  display: block; width: 3px;
+  background: var(--acid-green);
+  box-shadow: 0 0 4px rgba(57,255,20,0.6);
+  transform-origin: bottom;
+}
+.eq-bars span:nth-child(1) { height: 8px;  animation: eq 0.5s ease-in-out infinite; }
+.eq-bars span:nth-child(2) { height: 14px; animation: eq 0.5s ease-in-out infinite 0.15s; }
+.eq-bars span:nth-child(3) { height: 10px; animation: eq 0.5s ease-in-out infinite 0.3s; }
+@keyframes eq { 0%,100%{ transform:scaleY(0.35); } 50%{ transform:scaleY(1); } }
+
+/* ── Track right: duration ──────────────────────────── */
+.track-duration {
+  font-family: var(--font-mono); font-size: 0.68rem;
+  color: var(--muted); padding: 18px 20px; flex-shrink: 0; letter-spacing: 1px;
+}
+.track-item.playing .track-duration { color: var(--neon-orange); }
+
+/* ── Main Player Controls ───────────────────────────── */
+.player-controls {
+  border-top: 1px solid var(--border);
+  padding: 20px 24px;
+  background: rgba(0,0,0,0.3);
+}
+
+.now-playing-label {
+  font-size: 0.55rem; letter-spacing: 4px; color: var(--muted);
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.now-playing-name {
+  font-family: var(--font-display); font-size: 1rem;
+  letter-spacing: 2px; color: var(--neon-orange);
+  text-shadow: var(--glow-o);
+  margin-bottom: 16px;
+  min-height: 1.4em;
+}
+
+/* Progress bar */
+.progress-wrap {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+}
+.time-label {
+  font-family: var(--font-mono); font-size: 0.62rem;
+  color: var(--muted); letter-spacing: 1px; flex-shrink: 0; width: 38px;
+}
+.time-label.right { text-align: right; }
+
+.progress-track {
+  flex: 1; height: 3px; background: var(--very-muted);
+  position: relative; cursor: pointer;
+}
+.progress-track:hover { height: 5px; }
+.progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--blood-red), var(--neon-orange));
+  box-shadow: 0 0 6px rgba(255,69,0,0.5);
+  pointer-events: none; transition: width 0.1s linear;
+  position: relative;
+}
+.progress-fill::after {
+  content: ''; position: absolute; right: -4px; top: 50%;
+  transform: translateY(-50%);
+  width: 8px; height: 8px; background: var(--neon-orange);
+  border-radius: 50%; box-shadow: 0 0 6px rgba(255,69,0,0.7);
+  opacity: 0; transition: opacity 0.15s;
+}
+.progress-track:hover .progress-fill::after { opacity: 1; }
+
+/* Control buttons row */
+.ctrl-row {
+  display: flex; align-items: center; gap: 12px;
+}
+
+.ctrl-btn {
+  background: none; border: 1px solid var(--border);
+  color: var(--muted); font-size: 0.9rem;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+}
+.ctrl-btn:hover { border-color: var(--neon-orange); color: var(--neon-orange); }
+
+.ctrl-btn.play-pause {
+  width: 44px; height: 44px;
+  background: var(--neon-orange); border-color: var(--neon-orange);
+  color: #000; font-size: 1rem;
+}
+.ctrl-btn.play-pause:hover { background: #ff6a30; border-color: #ff6a30; }
+
+/* Volume */
+.vol-wrap {
+  display: flex; align-items: center; gap: 8px; margin-left: auto;
+}
+.vol-icon {
+  font-size: 0.8rem; color: var(--muted); flex-shrink: 0; cursor: pointer;
+  transition: color 0.2s; user-select: none;
+}
+.vol-icon:hover { color: var(--neon-orange); }
+
+input[type=range].vol-slider {
+  -webkit-appearance: none; appearance: none;
+  width: 80px; height: 3px;
+  background: var(--very-muted);
+  outline: none; cursor: pointer;
+}
+input[type=range].vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--neon-orange);
+  box-shadow: 0 0 6px rgba(255,69,0,0.6);
+  cursor: pointer;
+}
+input[type=range].vol-slider::-moz-range-thumb {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--neon-orange); border: none;
+  box-shadow: 0 0 6px rgba(255,69,0,0.6); cursor: pointer;
+}
+
+
+/* ── Easter egg pixel ────────────────────────────────── */
+@keyframes rainbow-cycle {
+  0%   { background: #ff0000; }
+  14%  { background: #ff7700; }
+  28%  { background: #ffff00; }
+  42%  { background: #00ff00; }
+  57%  { background: #0077ff; }
+  71%  { background: #8800ff; }
+  85%  { background: #ff00ff; }
+  100% { background: #ff0000; }
+}
+.easter-egg {
+  position: fixed;
+  bottom: 18px; right: 18px;
+  width: 1px; height: 1px;
+  display: block;
+  animation: rainbow-cycle 2s linear infinite;
+  z-index: 10000;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* ── Crafted by ──────────────────────────────────────── */
+.crafted-by {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  margin-top: 0;
+}
+.crafted-by a {
+  color: var(--neon-orange);
+  text-decoration: none;
+  transition: color 0.2s;
+  position: relative;
+  display: inline-block;
+}
+.crafted-by a:hover { color: #ff6a30; }
+
+/* Glitch on the crafted-by link */
+.crafted-by a::before,
+.crafted-by a::after {
+  content: attr(data-text);
+  position: absolute; inset: 0;
+  font: inherit; color: inherit;
+}
+.crafted-by a::before {
+  color: var(--blood-red);
+  animation: gclip1 4.2s infinite linear 0.5s;
+  opacity: 0.7;
+}
+.crafted-by a::after {
+  color: var(--acid-green);
+  animation: gclip2 4.2s infinite linear 0.6s;
+  opacity: 0.5;
+}
+.site-footer {
+  text-align: center; padding: 26px 26px 30px; border-top: 1px solid var(--border);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════════════════════ */
+@keyframes logo-breathe {
+  0%,100%{ text-shadow:0 0 8px rgba(255,69,0,0.6),0 0 22px rgba(255,69,0,0.25); }
+  50%    { text-shadow:0 0 18px rgba(255,69,0,0.9),0 0 42px rgba(255,69,0,0.45),0 0 65px rgba(255,69,0,0.12); }
+}
+.nav-logo { animation: logo-breathe 4s ease-in-out infinite; }
+
+@keyframes flicker {
+  0%,91%,95%,100%{ opacity:1; } 92%{ opacity:0.35; } 93%{ opacity:1; } 94%{ opacity:0.55; } 96%{ opacity:0.8; }
+}
+.flicker { animation: flicker 7s infinite; }
+
+@keyframes colon-blink { 0%,49%{ opacity:1; } 50%,100%{ opacity:0.2; } }
+.clock-sep { animation: colon-blink 1s step-end infinite; }
+
+@keyframes live-badge {
+  0%,100%{ box-shadow:0 0 4px rgba(57,255,20,0.3); }
+  50%    { box-shadow:0 0 14px rgba(57,255,20,0.7),0 0 28px rgba(57,255,20,0.25); }
+}
+.music-live { animation: live-badge 2.5s ease-in-out infinite; }
+
+@keyframes scan-sweep { from{ top:-80px; } to{ top:100%; } }
+.scan-line {
+  position: fixed; left:0; right:0; height:80px;
+  pointer-events:none; z-index:9997;
+  background: linear-gradient(180deg, transparent 0%, rgba(255,69,0,0.012) 50%, transparent 100%);
+  animation: scan-sweep 9s linear infinite;
+}
+
+@keyframes entry { from{ opacity:0; transform:translateY(-10px); } to{ opacity:1; transform:translateY(0); } }
+.hero           { animation: entry 0.55s ease both 0.05s; }
+.stats-bar      { animation: entry 0.55s ease both 0.18s; }
+.habit-grid     { animation: entry 0.55s ease both 0.3s; }
+.music-section  { animation: entry 0.55s ease both 0.44s; }
+
+@keyframes card-confirm {
+  0%  { box-shadow:none; }
+  30% { box-shadow:0 0 30px rgba(57,255,20,0.22),inset 0 0 12px rgba(57,255,20,0.04); }
+  100%{ box-shadow:0 0 22px rgba(255,69,0,0.05); }
+}
+.habit-card.flash { animation: card-confirm 0.9s ease forwards; }
+
+@keyframes streak-pop {
+  0%{ transform:scale(1); } 40%{ transform:scale(1.45); } 100%{ transform:scale(1); }
+}
+.streak-num.popped { animation: streak-pop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+
+@keyframes intense-pulse {
+  0%,100%{ box-shadow:none; }
+  50%    { box-shadow:0 0 28px rgba(255,69,0,0.16),inset 0 0 10px rgba(255,69,0,0.03); }
+}
+.intense .habit-card { animation: intense-pulse 2.2s ease-in-out infinite; }
+.intense .habit-card:nth-child(2) { animation-delay:1.1s; }
+  </style>
 </head>
 <body>
 
-  <!-- ══════════════ NAVIGATION ══════════════ -->
-  <nav class="site-nav" role="navigation" aria-label="Main navigation">
-    <span class="nav-logo flicker">SPARTANS</span>
-    <div class="nav-right">
-      <span id="live-clock" aria-label="Current time">00:00:00</span>
-      <span class="nav-tag">NO EXCUSES</span>
+<div class="scan-line" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <span class="nav-logo flicker">SPARTANS</span>
+  <div class="nav-right">
+    <span id="live-clock">00:00:00</span>
+  </div>
+</nav>
+
+<main class="wrapper">
+
+  <!-- HERO / QUOTE -->
+  <section class="hero">
+    <p class="hero-eyebrow">⚔ Daily Motivation ⚔</p>
+    <div id="quote-display"></div>
+    <span id="quote-author"></span>
+    <div class="hero-divider"></div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat-cell">
+      <span id="stat-run-streak" class="stat-val">0</span>
+      <span class="stat-label">Run Streak</span>
     </div>
-  </nav>
+    <div class="stat-cell">
+      <span id="stat-ex-streak" class="stat-val">0</span>
+      <span class="stat-label">Exercise Streak</span>
+    </div>
+    <div class="stat-cell">
+      <span id="stat-run-total" class="stat-val">0</span>
+      <span class="stat-label">Total Run Days</span>
+    </div>
+    <div class="stat-cell">
+      <span id="stat-ex-total" class="stat-val">0</span>
+      <span class="stat-label">Total Exercise Days</span>
+    </div>
+  </div>
 
-  <!-- ══════════════ MAIN WRAPPER ══════════════ -->
-  <main class="wrapper" role="main">
+  <!-- HABIT TRACKERS -->
+  <div class="sec-head">
+    <div class="sec-head-line"></div>
+    <span class="sec-head-label"><em>Daily</em> Habit Tracker</span>
+    <div class="sec-head-line"></div>
+  </div>
 
-    <!-- ── HERO / DAILY QUOTE ───────────────── -->
-    <section class="hero" aria-label="Daily quote">
-      <p class="hero-eyebrow">⚔ DAILY MOTIVATION ⚔</p>
+  <div class="habit-grid">
 
-      <div id="quote-display" role="heading" aria-level="1">
-        <!-- Populated by app.js -->
+    <!-- RUN / WALK -->
+    <div class="habit-card" id="card-run">
+      <div class="habit-top">
+        <div class="habit-icon-title">
+          <span class="habit-icon">🏃</span>
+          <div>
+            <div class="habit-title">Run / Walk</div>
+            <div class="habit-subtitle">Daily Movement</div>
+          </div>
+        </div>
+        <div class="streak-badge">
+          <span class="streak-num" id="run-streak-num">0</span>
+          <span class="streak-label">Day Streak</span>
+        </div>
       </div>
-
-      <span id="quote-author" class="quote-dash"></span>
-
-      <div style="margin-top:20px;">
-        <button
-          id="quote-refresh"
-          class="btn"
-          aria-label="Get new quote"
-          style="font-size:0.65rem;padding:7px 18px;letter-spacing:3px;">
-          NEW QUOTE
+      <div class="week-dots" id="run-week-dots"></div>
+      <div class="habit-check-row">
+        <button class="check-btn" id="run-check-btn" onclick="toggleHabit('run')">
+          <span class="ci">○</span>
+          <span class="ct">Mark Done Today</span>
         </button>
+        <button class="undo-btn" onclick="undoHabit('run')" title="Undo today">↩</button>
       </div>
-
-      <div class="hero-divider"></div>
-    </section>
-
-    <!-- ── STATS BAR ─────────────────────────── -->
-    <div class="stats-bar" role="region" aria-label="Today's stats">
-      <div class="stat-cell">
-        <span id="stat-km" class="stat-cell-val">0.0</span>
-        <span class="stat-cell-label">KM TODAY</span>
-      </div>
-      <div class="stat-cell">
-        <span id="stat-mins" class="stat-cell-val">0</span>
-        <span class="stat-cell-label">MINUTES</span>
-      </div>
-      <div class="stat-cell">
-        <span id="stat-ex" class="stat-cell-val">0</span>
-        <span class="stat-cell-label">EXERCISES</span>
-      </div>
-      <div class="stat-cell">
-        <span id="stat-cal" class="stat-cell-val">0</span>
-        <span class="stat-cell-label">~CALORIES</span>
+      <div class="habit-footer">
+        <span class="habit-footer-stat">Best Streak <span id="run-best">0</span></span>
+        <span class="habit-footer-stat">Total <span id="run-total-days">0</span> Days</span>
       </div>
     </div>
 
-    <!-- ── TRACKER GRID ───────────────────────── -->
-    <div class="tracker-grid" role="region" aria-label="Activity trackers">
+    <!-- EXERCISE -->
+    <div class="habit-card" id="card-ex">
+      <div class="habit-top">
+        <div class="habit-icon-title">
+          <span class="habit-icon">💪</span>
+          <div>
+            <div class="habit-title">Exercise</div>
+            <div class="habit-subtitle">Daily Training</div>
+          </div>
+        </div>
+        <div class="streak-badge">
+          <span class="streak-num" id="ex-streak-num">0</span>
+          <span class="streak-label">Day Streak</span>
+        </div>
+      </div>
+      <div class="week-dots" id="ex-week-dots"></div>
+      <div class="habit-check-row">
+        <button class="check-btn" id="ex-check-btn" onclick="toggleHabit('ex')">
+          <span class="ci">○</span>
+          <span class="ct">Mark Done Today</span>
+        </button>
+        <button class="undo-btn" onclick="undoHabit('ex')" title="Undo today">↩</button>
+      </div>
+      <div class="habit-footer">
+        <span class="habit-footer-stat">Best Streak <span id="ex-best">0</span></span>
+        <span class="habit-footer-stat">Total <span id="ex-total-days">0</span> Days</span>
+      </div>
+    </div>
 
-      <!-- CARD 1: Daily Run / Walk -->
-      <div class="card" id="run-card" aria-label="Daily run/walk tracker">
-        <div class="card-header">
-          <h2 class="card-title">DAILY RUN / WALK</h2>
-          <span class="card-icon" aria-hidden="true">🏃</span>
+  </div>
+
+  <!-- MUSIC PLAYER -->
+  <section class="music-section">
+    <div class="sec-head">
+      <div class="sec-head-line"></div>
+      <span class="sec-head-label"><em>Underground</em> Tempo</span>
+      <div class="sec-head-line"></div>
+    </div>
+
+    <div class="music-shell">
+
+      <div class="music-header">
+        <span class="music-title">Underground Tempo</span>
+        <span class="music-live">● Live</span>
+      </div>
+
+      <!-- ── TRACK LIST ── -->
+      <div id="track-list">
+
+        <div class="track-item" data-index="0" onclick="selectTrack(0)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-0">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 01</span>
+              <span class="track-name">Dark Workout Mix</span>
+              <span class="track-tag">Underground Tempo — Vol. I</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-0">—:——</span>
         </div>
 
-        <div class="section-title"><span>DISTANCE</span> GOAL: 10 KM</div>
-
-        <div class="metric-row">
-          <span class="metric-label">TOTAL KM</span>
-          <span class="metric-val" id="run-total-km">0.0</span>
-        </div>
-        <div class="prog-bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0">
-          <div class="prog-bar-fill" id="run-prog-fill" style="width:0%"></div>
-        </div>
-
-        <div class="metric-row">
-          <span class="metric-label">TOTAL MINS</span>
-          <span class="metric-val" id="run-total-mins">0</span>
+        <div class="track-item" data-index="1" onclick="selectTrack(1)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-1">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 02</span>
+              <span class="track-name">Aggressive Drill Session</span>
+              <span class="track-tag">Underground Tempo — Vol. II</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-1">—:——</span>
         </div>
 
-        <ul class="exercise-list" id="run-list" aria-label="Run log entries"></ul>
-
-        <!-- Inputs -->
-        <div class="section-title" style="margin-top:16px;"><span>LOG</span> NEW ACTIVITY</div>
-        <div style="margin-bottom:8px;">
-          <select id="run-type" class="spartan-input" style="width:100%;cursor:pointer;" aria-label="Activity type">
-            <option value="run">RUN</option>
-            <option value="walk">WALK</option>
-            <option value="jog">JOG</option>
-            <option value="sprint">SPRINT</option>
-          </select>
+        <div class="track-item" data-index="2" onclick="selectTrack(2)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-2">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 03</span>
+              <span class="track-name">Khatra Barz</span>
+              <span class="track-tag">5:55</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-2">—:——</span>
         </div>
-        <div class="input-group">
-          <input id="run-km"   type="number" class="spartan-input" placeholder="KM"   min="0.1" step="0.1" aria-label="Distance in km" />
-          <input id="run-mins" type="number" class="spartan-input" placeholder="MINS" min="1"   step="1"   aria-label="Duration in minutes" />
-          <button id="run-add-btn" class="btn btn-green" aria-label="Log activity">LOG</button>
+
+        <div class="track-item" data-index="3" onclick="selectTrack(3)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-3">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 04</span>
+              <span class="track-name">Jay Mahakaali</span>
+              <span class="track-tag">Balen</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-3">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="4" onclick="selectTrack(4)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-4">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 05</span>
+              <span class="track-name">Goat Tings</span>
+              <span class="track-tag">Underground</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-4">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="5" onclick="selectTrack(5)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-5">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 06</span>
+              <span class="track-name">Jindabaad Pt. 2</span>
+              <span class="track-tag">Jindabaad</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-5">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="6" onclick="selectTrack(6)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-6">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 07</span>
+              <span class="track-name">Kathmandu Flex</span>
+              <span class="track-tag">Street Anthem</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-6">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="7" onclick="selectTrack(7)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-7">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 08</span>
+              <span class="track-name">Case No. 420</span>
+              <span class="track-tag">Laure</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-7">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="8" onclick="selectTrack(8)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-8">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 09</span>
+              <span class="track-name">Nephop Ko Bato</span>
+              <span class="track-tag">Laure</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-8">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="9" onclick="selectTrack(9)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-9">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 10</span>
+              <span class="track-name">Ma Yesto Chu</span>
+              <span class="track-tag">Underground</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-9">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="10" onclick="selectTrack(10)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-10">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 11</span>
+              <span class="track-name">Aawaz</span>
+              <span class="track-tag">Mc Flo</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-10">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="11" onclick="selectTrack(11)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-11">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 12</span>
+              <span class="track-name">Kali Kali</span>
+              <span class="track-tag">ST Man ft. Yung 22</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-11">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="12" onclick="selectTrack(12)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-12">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 13</span>
+              <span class="track-name">Superraga</span>
+              <span class="track-tag">Underground</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-12">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="13" onclick="selectTrack(13)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-13">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 14</span>
+              <span class="track-name">Plan B</span>
+              <span class="track-tag">Sushant KC &amp; Yodda</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-13">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="14" onclick="selectTrack(14)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-14">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 15</span>
+              <span class="track-name">Yestai Ta Ho Ni Bro</span>
+              <span class="track-tag">VTEN</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-14">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="15" onclick="selectTrack(15)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-15">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 16</span>
+              <span class="track-name">Agnipath</span>
+              <span class="track-tag">Yodda</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-15">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="16" onclick="selectTrack(16)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-16">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 17</span>
+              <span class="track-name">Katha</span>
+              <span class="track-tag">Yodda</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-16">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="17" onclick="selectTrack(17)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-17">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 18</span>
+              <span class="track-name">Kharab Bani (Nakab)</span>
+              <span class="track-tag">Yodda</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-17">—:——</span>
+        </div>
+
+        <div class="track-item" data-index="18" onclick="selectTrack(18)">
+          <div class="track-left">
+            <div class="track-play-icon" id="ti-icon-18">▶</div>
+            <div class="track-meta">
+              <span class="track-number">Track 19</span>
+              <span class="track-name">Suruwat</span>
+              <span class="track-tag">Yodda</span>
+            </div>
+            <div class="eq-bars"><span></span><span></span><span></span></div>
+          </div>
+          <span class="track-duration" id="ti-dur-18">—:——</span>
+        </div>
+
+      </div><!-- /track-list -->
+
+      <!-- ── PLAYER CONTROLS ── -->
+      <div class="player-controls">
+        <div class="now-playing-label">Now Playing</div>
+        <div class="now-playing-name" id="now-playing-name">— Select a track —</div>
+
+        <!-- Progress -->
+        <div class="progress-wrap">
+          <span class="time-label" id="time-cur">0:00</span>
+          <div class="progress-track" id="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <span class="time-label right" id="time-dur">0:00</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="ctrl-row">
+          <button class="ctrl-btn" onclick="prevTrack()" title="Previous">⏮</button>
+          <button class="ctrl-btn play-pause" id="play-pause-btn" onclick="togglePlay()" title="Play / Pause">▶</button>
+          <button class="ctrl-btn" onclick="nextTrack()" title="Next">⏭</button>
+          <div class="vol-wrap">
+            <span class="vol-icon" onclick="toggleMute()" id="vol-icon">🔊</span>
+            <input type="range" class="vol-slider" id="vol-slider" min="0" max="1" step="0.05" value="0.8" oninput="setVolume(this.value)">
+          </div>
         </div>
       </div>
 
-      <!-- CARD 2: Basic Exercise -->
-      <div class="card" id="ex-card" aria-label="Exercise tracker">
-        <div class="card-header">
-          <h2 class="card-title">BASIC EXERCISE</h2>
-          <span class="card-icon" aria-hidden="true">💪</span>
-        </div>
 
-        <div class="section-title"><span>EXERCISES</span> GOAL: 5 TYPES</div>
+    </div><!-- /music-shell -->
 
-        <div class="metric-row">
-          <span class="metric-label">LOGGED TODAY</span>
-          <span class="metric-val" id="ex-total">0</span>
-        </div>
-        <div class="prog-bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
-          <div class="prog-bar-fill" id="ex-prog-fill" style="width:0%"></div>
-        </div>
+    <!-- Hidden audio engine -->
+    <audio id="audio-engine" preload="none"></audio>
 
-        <!-- Quick-add preset buttons -->
-        <div class="section-title" style="margin-top:16px;"><span>QUICK</span> ADD</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;" aria-label="Quick-add exercises">
-          <button class="btn" style="font-size:0.6rem;padding:5px 10px;" data-quick="PUSH-UPS|3|20">PUSH-UPS</button>
-          <button class="btn" style="font-size:0.6rem;padding:5px 10px;" data-quick="PULL-UPS|3|10">PULL-UPS</button>
-          <button class="btn" style="font-size:0.6rem;padding:5px 10px;" data-quick="SQUATS|3|25">SQUATS</button>
-          <button class="btn" style="font-size:0.6rem;padding:5px 10px;" data-quick="PLANK|3|60">PLANK</button>
-          <button class="btn" style="font-size:0.6rem;padding:5px 10px;" data-quick="BURPEES|3|15">BURPEES</button>
-          <button class="btn" style="font-size:0.6rem;padding:5px 10px;" data-quick="DIPS|3|15">DIPS</button>
-        </div>
+  </section>
 
-        <ul class="exercise-list" id="ex-list" aria-label="Exercise log entries"></ul>
+</main>
 
-        <!-- Custom inputs -->
-        <div class="section-title" style="margin-top:16px;"><span>CUSTOM</span> EXERCISE</div>
-        <div style="margin-bottom:8px;">
-          <input id="ex-name" type="text" class="spartan-input" placeholder="EXERCISE NAME" style="width:100%;" aria-label="Exercise name" />
-        </div>
-        <div class="input-group">
-          <input id="ex-sets" type="number" class="spartan-input" placeholder="SETS" min="1" aria-label="Number of sets" />
-          <input id="ex-reps" type="number" class="spartan-input" placeholder="REPS" min="1" aria-label="Number of reps" />
-          <button id="ex-add-btn" class="btn btn-green" aria-label="Log exercise">LOG</button>
-        </div>
-      </div>
+<footer class="site-footer">
+  <div class="crafted-by">Crafted by <a href="https://raktapyas.github.io/portfilo/" target="_blank" rel="noopener noreferrer" data-text="Raktapyas">Raktapyas</a></div>
+</footer>
 
-    </div><!-- /tracker-grid -->
+<!-- Easter egg: 1px rainbow pixel, bottom-right, no label -->
+<a class="easter-egg"
+   href="https://raktapyas.github.io/portfilo/"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-hidden="true"
+   tabindex="-1"></a>
 
-    <!-- ── MUSIC PLAYER ───────────────────────── -->
-    <section class="music-section" aria-label="Music player">
-      <div class="section-title"><span>UNDERGROUND</span> TEMPO</div>
+<script>
+/* ─────────────────────────────────────────────────────
+   QUOTES
+───────────────────────────────────────────────────── */
+const QUOTES = [
+  { text:"Stay Loyal to Your Goals.",               author:"SPARTAN CODE"    },
+  { text:"Iron Sharpens Iron.",                      author:"PROVERBS 27:17"  },
+  { text:"No Excuses. Only Results.",                author:"SPARTAN CODE"    },
+  { text:"Build Your Own Legacy.",                   author:"UNDERGROUND LAW" },
+  { text:"Comfort is the Enemy.",                    author:"SPARTAN CODE"    },
+  { text:"Keep the Underground Vibe.",               author:"SPARTAN CODE"    },
+  { text:"Don't Stop Until You're Proud.",           author:"SPARTAN CODE"    },
+  { text:"Bleed Today. Win Tomorrow.",               author:"SPARTAN CREED"   },
+  { text:"Pain is Temporary. Glory is Eternal.",     author:"SPARTAN CREED"   },
+  { text:"Either You Run the Day or the Day Runs You.", author:"JIM ROHN"    },
+  { text:"Champions Are Made in the Dark.",          author:"UNDERGROUND LAW" },
+  { text:"Fear No Man. Respect Every Rep.",          author:"UNDERGROUND LAW" },
+  { text:"Your Silence is Your Weapon.",             author:"SPARTAN CODE"    },
+  { text:"The Grind Does Not Stop.",                 author:"UNDERGROUND LAW" },
+  { text:"Wolves Don't Lose Sleep Over Sheep.",      author:"SPARTAN PROVERB" },
+  { text:"Do It In Silence. Let Success Make the Noise.", author:"UNDERGROUND LAW" },
+  { text:"Every Scar is a Lesson Earned.",           author:"SPARTAN CREED"   },
+  { text:"Loyalty. Discipline. Execution.",          author:"SPARTAN CODE"    },
+  { text:"Real Ones Work While Others Watch.",       author:"STREET CODE"     },
+  { text:"Pressure Makes Diamonds.",                 author:"STREET CODE"     },
+  { text:"Build in Silence. Destroy in Chaos.",      author:"UNDERGROUND LAW" },
+  { text:"Survive First. Thrive Second.",            author:"UNDERGROUND LAW" },
+  { text:"Stay Low. Move Fast. Hit Hard.",           author:"STREET CODE"     },
+  { text:"Trust the Process. Not the People.",       author:"UNDERGROUND LAW" },
+  { text:"Suffer the Pain of Discipline or the Pain of Regret.", author:"SPARTAN WISDOM" },
+];
 
-      <div class="music-player">
-        <div class="music-header">
-          <span class="music-title">UNDERGROUND TEMPO</span>
-          <span class="music-badge">● LIVE</span>
-        </div>
+function getPageLoadQuote() {
+  return QUOTES[Math.floor(Math.random() * QUOTES.length)];
+}
 
-        <!-- Hidden YouTube iframes — audio only -->
-        <div class="audio-iframes" aria-hidden="true">
-          <iframe
-            id="iframe-1"
-            data-src="https://www.youtube.com/embed/u6zp1ylT4AQ?si=lH3R_zmytOc2LKNP&enablejsapi=1"
-            width="0" height="0"
-            title="Underground Tempo Vol. I"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin">
-          </iframe>
-          <iframe
-            id="iframe-2"
-            data-src="https://www.youtube.com/embed/fixaI64sR3g?si=qnP-J4MOW1Q8rGR-&enablejsapi=1"
-            width="0" height="0"
-            title="Underground Tempo Vol. II"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin">
-          </iframe>
-        </div>
+function renderQuote(q) {
+  const el = document.getElementById('quote-display');
+  el.style.opacity='0'; el.style.transform='translateY(10px)';
+  setTimeout(() => {
+    el.innerHTML = `<span class="glitch" data-text="${q.text}">${q.text}</span>`;
+    el.style.opacity='1'; el.style.transform='translateY(0)';
+    document.getElementById('quote-author').textContent = `— ${q.author}`;
+  }, 320);
+}
 
-        <!-- Track list (populated by music.js) -->
-        <div id="track-list" role="list" aria-label="Track list"></div>
+/* ─────────────────────────────────────────────────────
+   CLOCK
+───────────────────────────────────────────────────── */
+function startClock() {
+  const el = document.getElementById('live-clock');
+  function tick() {
+    const n = new Date();
+    const hh=String(n.getHours()).padStart(2,'0');
+    const mm=String(n.getMinutes()).padStart(2,'0');
+    const ss=String(n.getSeconds()).padStart(2,'0');
+    el.innerHTML=`${hh}<span class="clock-sep">:</span>${mm}<span class="clock-sep">:</span>${ss}`;
+  }
+  tick(); setInterval(tick,1000);
+}
 
-        <p style="font-size:0.6rem;color:var(--muted);letter-spacing:2px;margin-top:16px;text-align:center;">
-          CLICK TRACK TO PLAY · CLICK AGAIN TO STOP
-        </p>
-      </div>
-    </section>
+/* ─────────────────────────────────────────────────────
+   HABIT TRACKER
+───────────────────────────────────────────────────── */
+const DAY_LABELS = ['M','T','W','T','F','S','S'];
 
-  </main><!-- /wrapper -->
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function todayKey() { return dateKey(new Date()); }
+function daysAgo(n) { const d=new Date(); d.setDate(d.getDate()-n); return d; }
 
-  <!-- ══════════════ FOOTER ══════════════ -->
-  <footer class="site-footer" role="contentinfo">
-    <span>SPARTANS</span> &nbsp;·&nbsp;
-    NO EXCUSES. ONLY RESULTS.
-    &nbsp;·&nbsp; &copy; <span id="footer-year"></span>
-  </footer>
+function loadHabit(id) {
+  try {
+    const raw = localStorage.getItem(`spartans_h_${id}`);
+    return raw ? JSON.parse(raw) : { days:[], best:0 };
+  } catch(e) { return { days:[], best:0 }; }
+}
+function saveHabit(id, data) {
+  try { localStorage.setItem(`spartans_h_${id}`, JSON.stringify(data)); } catch(e) {}
+}
 
-  <!-- ══════════════ QUICK-ADD HANDLER (inline, before module) ══════════════ -->
-  <script>
-    /* Quick-add exercise buttons — handled before ES module loads */
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-quick]');
-      if (!btn) return;
-      const [name, sets, reps] = btn.dataset.quick.split('|');
-      document.getElementById('ex-name').value = name;
-      document.getElementById('ex-sets').value = sets;
-      document.getElementById('ex-reps').value = reps;
-      document.getElementById('ex-add-btn').click();
+function calcStreak(days) {
+  if (!days.length) return 0;
+  const set = new Set(days);
+  let streak = 0, d = new Date();
+  if (!set.has(dateKey(d))) d.setDate(d.getDate()-1);
+  while (set.has(dateKey(d))) { streak++; d.setDate(d.getDate()-1); }
+  return streak;
+}
+
+function renderHabit(id) {
+  const data   = loadHabit(id);
+  const set    = new Set(data.days);
+  const today  = todayKey();
+  const isDone = set.has(today);
+  const streak = calcStreak(data.days);
+  const best   = Math.max(data.best||0, streak);
+
+  // Card state
+  document.getElementById(`card-${id}`).classList.toggle('done', isDone);
+
+  // Streak num
+  document.getElementById(`${id}-streak-num`).textContent = streak;
+
+  // Footer
+  document.getElementById(`${id}-best`).textContent      = best;
+  document.getElementById(`${id}-total-days`).textContent = data.days.length;
+
+  // Check button
+  const btn = document.getElementById(`${id}-check-btn`);
+  btn.classList.toggle('done', isDone);
+  btn.querySelector('.ci').textContent = isDone ? '✓' : '○';
+  btn.querySelector('.ct').textContent = isDone ? 'Completed Today!' : 'Mark Done Today';
+
+  // Week dots — last 7 days (oldest → newest left to right)
+  const wrap = document.getElementById(`${id}-week-dots`);
+  wrap.innerHTML = '';
+  for (let i=6; i>=0; i--) {
+    const d   = daysAgo(i);
+    const key = dateKey(d);
+    const isT = key===today;
+    const done= set.has(key);
+    const dow = (d.getDay()+6)%7;
+    const div = document.createElement('div');
+    div.className = 'dot-day';
+    div.innerHTML = `
+      <div class="dot-circle${done?' filled':''}${isT?' today':''}" title="${key}"></div>
+      <span class="dot-day-label">${DAY_LABELS[dow]}</span>`;
+    wrap.appendChild(div);
+  }
+
+  // Stats bar
+  document.getElementById(`stat-${id}-streak`).textContent = streak;
+  document.getElementById(`stat-${id}-total`).textContent  = data.days.length;
+}
+
+function toggleHabit(id) {
+  const data  = loadHabit(id);
+  const today = todayKey();
+  const set   = new Set(data.days);
+  if (set.has(today)) return;
+  set.add(today);
+  data.days = Array.from(set).sort();
+  const streak = calcStreak(data.days);
+  data.best = Math.max(data.best||0, streak);
+  saveHabit(id, data);
+  renderHabit(id);
+
+  // Flash card
+  const card = document.getElementById(`card-${id}`);
+  card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash');
+  setTimeout(()=>card.classList.remove('flash'),900);
+
+  // Pop streak num
+  const sn = document.getElementById(`${id}-streak-num`);
+  sn.classList.remove('popped'); void sn.offsetWidth; sn.classList.add('popped');
+  setTimeout(()=>sn.classList.remove('popped'),450);
+
+  checkIntense();
+}
+
+function undoHabit(id) {
+  const data = loadHabit(id);
+  data.days  = data.days.filter(d=>d!==todayKey());
+  saveHabit(id, data);
+  renderHabit(id);
+  checkIntense();
+}
+
+function checkIntense() {
+  const rDone = new Set(loadHabit('run').days).has(todayKey());
+  const eDone = new Set(loadHabit('ex').days).has(todayKey());
+  document.body.classList.toggle('intense', rDone && eDone);
+}
+
+/* ─────────────────────────────────────────────────────
+   MUSIC PLAYER
+   ─────────────────────────────────────────────────────
+   TO ADD A NEW TRACK:
+   1. Copy your .mp3 into the  audio/  folder.
+   2. Add a new object here:
+      { file: 'audio/Your_File.mp3', name: 'Track Title', tag: 'Subtitle' }
+   3. Add a matching track-item div in the HTML above.
+   That's it. No other changes needed.
+───────────────────────────────────────────────────── */
+const TRACKS = [
+  { file: 'audio/Dark_Workout_Mix.mp3',               name: 'Dark Workout Mix',         tag: 'Underground Tempo — Vol. I'  },
+  { file: 'audio/Aggressive_Drill_Session.mp3',       name: 'Aggressive Drill Session', tag: 'Underground Tempo — Vol. II' },
+  { file: 'audio/5_55_-_Khatra_Barz.mp3',             name: 'Khatra Barz',              tag: '5:55'                        },
+  { file: 'audio/BALEN_-_JAY_MAHAKAALI_.mp3',         name: 'Jay Mahakaali',            tag: 'Balen'                       },
+  { file: 'audio/Goat_Tings.mp3',                     name: 'Goat Tings',               tag: 'Underground'                 },
+  { file: 'audio/Jindabaad_-_Jindabaad__Pt__2_.mp3',  name: 'Jindabaad Pt. 2',          tag: 'Jindabaad'                   },
+  { file: 'audio/_Kathmandu_Flex.mp3',                name: 'Kathmandu Flex',           tag: 'Street Anthem'               },
+  { file: 'audio/LAURE_-_Case_No__420_.mp3',          name: 'Case No. 420',             tag: 'Laure'                       },
+  { file: 'audio/Laure_-_Nephop_ko_bato.mp3',         name: 'Nephop Ko Bato',           tag: 'Laure'                       },
+  { file: 'audio/Ma_Yesto_Chu.mp3',                   name: 'Ma Yesto Chu',             tag: 'Underground'                 },
+  { file: 'audio/Mc_Flo_-_Aawaz.mp3',                name: 'Aawaz',                    tag: 'Mc Flo'                      },
+  { file: 'audio/ST_MAN_-_KALI_KALI_FT__YUNG_22_.mp3',name: 'Kali Kali',              tag: 'ST Man ft. Yung 22'           },
+  { file: 'audio/Superraga.mp3',                      name: 'Superraga',                tag: 'Underground'                 },
+  { file: 'audio/Sushant_KC__Yodda_-_Plan_B_.mp3',   name: 'Plan B',                   tag: 'Sushant KC & Yodda'          },
+  { file: 'audio/VTEN_-_Yestai_Ta_Ho_Ni_Bro.mp3',    name: 'Yestai Ta Ho Ni Bro',      tag: 'VTEN'                        },
+  { file: 'audio/YODDA_-_AGNIPATH_.mp3',              name: 'Agnipath',                 tag: 'Yodda'                       },
+  { file: 'audio/YODDA_-_KATHA_.mp3',                 name: 'Katha',                    tag: 'Yodda'                       },
+  { file: 'audio/YODDA_-_KHARAB_BANI__NAKAB_.mp3',   name: 'Kharab Bani (Nakab)',       tag: 'Yodda'                       },
+  { file: 'audio/Yodda_-_Suruwat_.mp3',               name: 'Suruwat',                  tag: 'Yodda'                       },
+];
+
+const audio      = document.getElementById('audio-engine');
+let   curIdx     = -1;
+let   isMuted    = false;
+let   prevVol    = 0.8;
+
+/* Format seconds → m:ss */
+function fmtTime(s) {
+  if (!s || isNaN(s)) return '0:00';
+  const m = Math.floor(s/60), sec = Math.floor(s%60);
+  return `${m}:${String(sec).padStart(2,'0')}`;
+}
+
+/* Highlight active track row */
+function setActiveRow(idx) {
+  document.querySelectorAll('.track-item').forEach((el,i) => {
+    el.classList.toggle('playing', i===idx);
+    const icon = document.getElementById(`ti-icon-${i}`);
+    if (icon) icon.textContent = (i===idx && !audio.paused) ? '■' : '▶';
+  });
+}
+
+/* Select a track (click on row) */
+function selectTrack(idx) {
+  if (curIdx === idx && !audio.paused) { togglePlay(); return; }
+  curIdx = idx;
+  const t = TRACKS[idx];
+  audio.src = t.file;
+  audio.volume = parseFloat(document.getElementById('vol-slider').value);
+  audio.load();
+  audio.play().catch(()=>{});
+  document.getElementById('now-playing-name').textContent = t.name;
+  setActiveRow(idx);
+  updatePlayBtn();
+}
+
+/* Play / Pause toggle */
+function togglePlay() {
+  if (curIdx === -1) { selectTrack(0); return; }
+  if (audio.paused) { audio.play().catch(()=>{}); }
+  else { audio.pause(); }
+}
+
+function prevTrack() {
+  const next = curIdx <= 0 ? TRACKS.length-1 : curIdx-1;
+  selectTrack(next);
+}
+function nextTrack() {
+  const next = (curIdx+1) % TRACKS.length;
+  selectTrack(next);
+}
+
+function setVolume(v) {
+  audio.volume = parseFloat(v);
+  isMuted = false;
+  audio.muted = false;
+  document.getElementById('vol-icon').textContent = parseFloat(v) < 0.01 ? '🔇' : parseFloat(v) < 0.5 ? '🔉' : '🔊';
+}
+
+function toggleMute() {
+  isMuted = !isMuted;
+  audio.muted = isMuted;
+  document.getElementById('vol-icon').textContent = isMuted ? '🔇' : '🔊';
+}
+
+function updatePlayBtn() {
+  document.getElementById('play-pause-btn').textContent = audio.paused ? '▶' : '⏸';
+}
+
+/* Audio events */
+audio.addEventListener('play',    () => { setActiveRow(curIdx); updatePlayBtn(); });
+audio.addEventListener('pause',   () => { setActiveRow(curIdx); updatePlayBtn(); });
+audio.addEventListener('ended',   () => nextTrack());
+
+audio.addEventListener('timeupdate', () => {
+  const pct = audio.duration ? (audio.currentTime / audio.duration)*100 : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('time-cur').textContent = fmtTime(audio.currentTime);
+});
+
+audio.addEventListener('loadedmetadata', () => {
+  document.getElementById('time-dur').textContent = fmtTime(audio.duration);
+  // Update duration label in track row
+  const durEl = document.getElementById(`ti-dur-${curIdx}`);
+  if (durEl) durEl.textContent = fmtTime(audio.duration);
+});
+
+/* Seekable progress bar */
+document.getElementById('progress-track').addEventListener('click', (e) => {
+  if (!audio.duration) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const ratio = (e.clientX - rect.left) / rect.width;
+  audio.currentTime = ratio * audio.duration;
+});
+
+/* Pre-load durations for all tracks on first user gesture */
+function preloadDurations() {
+  TRACKS.forEach((t, i) => {
+    if (i === curIdx) return;
+    const tmp = new Audio();
+    tmp.preload = 'metadata';
+    tmp.src = t.file;
+    tmp.addEventListener('loadedmetadata', () => {
+      const el = document.getElementById(`ti-dur-${i}`);
+      if (el) el.textContent = fmtTime(tmp.duration);
     });
+  });
+}
+document.addEventListener('click', preloadDurations, { once: true });
 
-    /* Footer year */
-    document.getElementById('footer-year').textContent = new Date().getFullYear();
-  </script>
 
-  <!-- ══════════════ APP MODULE ══════════════ -->
-  <script type="module" src="js/app.js"></script>
-
+document.addEventListener('DOMContentLoaded', () => {
+  startClock();
+  renderQuote(getPageLoadQuote());
+  renderHabit('run');
+  renderHabit('ex');
+  checkIntense();
+  console.log('%cSPARTANS ONLINE','color:#ff4500;font-size:18px;font-weight:bold;letter-spacing:4px;');
+});
+</script>
 </body>
 </html>
