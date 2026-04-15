@@ -1211,36 +1211,26 @@ function checkIntense() {
   document.body.classList.toggle('intense', rDone && eDone);
 }
 
-/* ─────────────────────────────────────────────────────
-   MUSIC PLAYER
-   ─────────────────────────────────────────────────────
-   TO ADD A NEW TRACK:
-   1. Copy your .mp3 into the  audio/  folder.
-   2. Add a new object here:
-      { file: 'audio/Your_File.mp3', name: 'Track Title', tag: 'Subtitle' }
-   3. Add a matching track-item div in the HTML above.
-   That's it. No other changes needed.
-───────────────────────────────────────────────────── */
 const TRACKS = [
   { file: 'audio/Dark_Workout_Mix.mp3',               name: 'Dark Workout Mix',         tag: 'Underground Tempo — Vol. I'  },
   { file: 'audio/Aggressive_Drill_Session.mp3',       name: 'Aggressive Drill Session', tag: 'Underground Tempo — Vol. II' },
-  { file: 'audio/5_55_-_Khatra_Barz.mp3',             name: 'Khatra Barz',              tag: '5:55'                        },
-  { file: 'audio/BALEN_-_JAY_MAHAKAALI_.mp3',         name: 'Jay Mahakaali',            tag: 'Balen'                       },
-  { file: 'audio/Goat_Tings.mp3',                     name: 'Goat Tings',               tag: 'Underground'                 },
-  { file: 'audio/Jindabaad_-_Jindabaad__Pt__2_.mp3',  name: 'Jindabaad Pt. 2',          tag: 'Jindabaad'                   },
-  { file: 'audio/_Kathmandu_Flex.mp3',                name: 'Kathmandu Flex',           tag: 'Street Anthem'               },
-  { file: 'audio/LAURE_-_Case_No__420_.mp3',          name: 'Case No. 420',             tag: 'Laure'                       },
-  { file: 'audio/Laure_-_Nephop_ko_bato.mp3',         name: 'Nephop Ko Bato',           tag: 'Laure'                       },
-  { file: 'audio/Ma_Yesto_Chu.mp3',                   name: 'Ma Yesto Chu',             tag: 'Underground'                 },
-  { file: 'audio/Mc_Flo_-_Aawaz.mp3',                name: 'Aawaz',                    tag: 'Mc Flo'                      },
-  { file: 'audio/ST_MAN_-_KALI_KALI_FT__YUNG_22_.mp3',name: 'Kali Kali',              tag: 'ST Man ft. Yung 22'           },
+  { file: 'audio/5_55 - Khatra Barz.mp3',             name: 'Khatra Barz',              tag: '5:55'                        },
+  { file: 'audio/BALEN - JAY MAHAKAALI .mp3',         name: 'Jay Mahakaali',            tag: 'Balen'                       },
+  { file: 'audio/Goat Tings.mp3',                     name: 'Goat Tings',               tag: 'Underground'                 },
+  { file: 'audio/Jindabaad - Jindabaad, Pt. 2 .mp3',  name: 'Jindabaad Pt. 2',          tag: 'Jindabaad'                   },
+  { file: 'audio/ Kathmandu Flex.mp3',                name: 'Kathmandu Flex',           tag: 'Street Anthem'               },
+  { file: 'audio/LAURE - Case No. 420 .mp3',          name: 'Case No. 420',             tag: 'Laure'                       },
+  { file: 'audio/Laure - Nephop ko bato.mp3',         name: 'Nephop Ko Bato',           tag: 'Laure'                       },
+  { file: 'audio/Ma Yesto Chu.mp3',                   name: 'Ma Yesto Chu',             tag: 'Underground'                 },
+  { file: 'audio/Mc Flo - Aawaz.mp3',                name: 'Aawaz',                    tag: 'Mc Flo'                      },
+  { file: 'audio/ST MAN - KALI KALI FT. YUNG 22 .mp3',name: 'Kali Kali',              tag: 'ST Man ft. Yung 22'           },
   { file: 'audio/Superraga.mp3',                      name: 'Superraga',                tag: 'Underground'                 },
-  { file: 'audio/Sushant_KC__Yodda_-_Plan_B_.mp3',   name: 'Plan B',                   tag: 'Sushant KC & Yodda'          },
-  { file: 'audio/VTEN_-_Yestai_Ta_Ho_Ni_Bro.mp3',    name: 'Yestai Ta Ho Ni Bro',      tag: 'VTEN'                        },
-  { file: 'audio/YODDA_-_AGNIPATH_.mp3',              name: 'Agnipath',                 tag: 'Yodda'                       },
-  { file: 'audio/YODDA_-_KATHA_.mp3',                 name: 'Katha',                    tag: 'Yodda'                       },
-  { file: 'audio/YODDA_-_KHARAB_BANI__NAKAB_.mp3',   name: 'Kharab Bani (Nakab)',       tag: 'Yodda'                       },
-  { file: 'audio/Yodda_-_Suruwat_.mp3',               name: 'Suruwat',                  tag: 'Yodda'                       },
+  { file: 'audio/Sushant KC, Yodda - Plan B .mp3',   name: 'Plan B',                   tag: 'Sushant KC & Yodda'          },
+  { file: 'audio/VTEN - Yestai Ta Ho Ni Bro.mp3',    name: 'Yestai Ta Ho Ni Bro',      tag: 'VTEN'                        },
+  { file: 'audio/YODDA - AGNIPATH .mp3',              name: 'Agnipath',                 tag: 'Yodda'                       },
+  { file: 'audio/YODDA - KATHA .mp3',                 name: 'Katha',                    tag: 'Yodda'                       },
+  { file: 'audio/YODDA - KHARAB BANI (NAKAB).mp3',   name: 'Kharab Bani (Nakab)',       tag: 'Yodda'                       },
+  { file: 'audio/Yodda - Suruwat .mp3',               name: 'Suruwat',                  tag: 'Yodda'                       },
 ];
 
 const audio      = document.getElementById('audio-engine');
